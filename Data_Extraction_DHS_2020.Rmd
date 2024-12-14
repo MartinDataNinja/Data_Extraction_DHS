@@ -1,0 +1,256 @@
+---
+title: "Data_Extraction_dta"
+author: "Martin"
+date: "2024-12-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Libraries required
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(dplyr)
+library(haven)
+library(labelled)
+library(writexl)
+```
+
+
+read_dat
+```{r}
+dir<-"C:/Users/GK TECH/Desktop/Rwanda/RW_2019-20_DHS/RWKR81DT"
+rwanda_2020 <- read_dta (file.path(dir,"RWKR81FL.DTA"))
+
+data_dictionary <- labelled::generate_dictionary (rwanda_2020)
+View(data_dictionary)
+```
+
+
+```{r}
+
+# Demographics
+CaseId<-rwanda_2020$caseid
+Age_of_child_1 <- rwanda_2020$hw1
+Age_of_child_2 <- rwanda_2020$b8
+Sex_of_child <- rwanda_2020$b4
+Exclusive_Breastfeeding_1 <- rwanda_2020$m4
+Exclusive_Breastfeeding_2 <- rwanda_2020$m5
+Preceding_Birth_Interval_1 <- rwanda_2020$b11
+Preceding_Birth_Interval_2 <- rwanda_2020$b12
+Age_of_the_mother_1 <- rwanda_2020$v012
+Age_of_the_mother_2 <- rwanda_2020$v013
+Education_level_of_the_mother_1 <- rwanda_2020$v106
+Education_level_of_the_mother_2 <- rwanda_2020$v149
+Literacy_of_the_mother <- rwanda_2020$v155
+Marital_status_of_the_mother <- rwanda_2020$v501
+Working_status_of_the_mother_1 <- rwanda_2020$v714
+Working_status_of_the_mother_2 <- rwanda_2020$v716
+Education_level_of_the_father <- rwanda_2020$v701
+Working_status_of_the_father <- rwanda_2020$v704
+
+# Contraception
+Use_of_modern_Contraception_1 <- rwanda_2020$v312
+Use_of_modern_Contraception_2 <- rwanda_2020$v364
+
+# Wealth and Residence
+Wealth_status_1 <- rwanda_2020$v190
+Wealth_status_2 <- rwanda_2020$v191
+Residence_type_1 <- rwanda_2020$v025
+Residence_type_2 <- rwanda_2020$v102
+Province <- rwanda_2020$v024
+
+# Household Characteristics
+Family_size <- rwanda_2020$v136
+Underfive_children_in_household <- rwanda_2020$v137
+Water_source <- rwanda_2020$v113
+Drinking_water_treatment <- rwanda_2020$v115
+Toilet_type <- rwanda_2020$v116
+Sharing_toilet_with_others <- rwanda_2020$v160
+Distance_to_water_source <- rwanda_2020$v115
+
+# Delivery and Healthcare Access
+Delivery_place <- rwanda_2020$m15
+Distance_to_health_facility <- rwanda_2020$v467d
+
+# Health and Insurance
+Insurance_status <- rwanda_2020$v467d
+Exposure_to_media_1 <- rwanda_2020$v120
+Exposure_to_media_2 <- rwanda_2020$v121
+Exposure_to_media_3 <- rwanda_2020$v157
+Exposure_to_media_4 <- rwanda_2020$v158
+Exposure_to_media_5 <- rwanda_2020$v159
+
+# Outcome variables
+Under_five_mortality <- rwanda_2020$b5
+Age_at_death <- rwanda_2020$b6
+ANC_visits <- rwanda_2020$m14
+Size_of_child_at_birth <- rwanda_2020$m18
+Birth_weight_in_kg <- rwanda_2020$m19
+Delivery_by_CS <- rwanda_2020$m17
+Religion <- rwanda_2020$v130
+Birth_order <- rwanda_2020$bord
+
+# Vaccination
+Received_BCG <- rwanda_2020$h2
+Received_DPT1 <- rwanda_2020$h3
+Received_Polio1 <- rwanda_2020$h4
+Received_DPT2 <- rwanda_2020$h5
+Received_Polio2 <- rwanda_2020$h6
+Received_DPT3 <- rwanda_2020$h7
+Received_Polio3 <- rwanda_2020$h8
+Received_Measles <- rwanda_2020$h9
+Received_Polio0 <- rwanda_2020$h0
+Ever_had_vaccination <- rwanda_2020$h10
+```
+
+```{r}
+
+# Demographics
+Demographics <- data.frame(CaseId,
+  Age_of_child_1,
+  Age_of_child_2,
+  Sex_of_child,
+  Exclusive_Breastfeeding_1,
+  Exclusive_Breastfeeding_2,
+  Preceding_Birth_Interval_1,
+  Preceding_Birth_Interval_2,
+  Age_of_the_mother_1,
+  Age_of_the_mother_2,
+  Education_level_of_the_mother_1,
+  Education_level_of_the_mother_2,
+  Literacy_of_the_mother,
+  Marital_status_of_the_mother,
+  Working_status_of_the_mother_1,
+  Working_status_of_the_mother_2,
+  Education_level_of_the_father,
+  Working_status_of_the_father
+)
+
+write_xlsx(Demographics, "Demographics.xlsx")
+
+Contraception <- data.frame(
+  Use_of_modern_Contraception_1,
+  Use_of_modern_Contraception_2
+)
+
+write_xlsx(Contraception, "Contraception.xlsx")
+
+# Wealth and Residence
+Wealth_and_Residence <- data.frame(
+  Wealth_status_1,
+  Wealth_status_2,
+  Residence_type_1,
+  Residence_type_2,
+  Province
+)
+
+write_xlsx(Wealth_and_Residence, "Wealth_and_Residence.xlsx")
+
+# Household Characteristics
+Household_Characteristics <- data.frame(
+  Family_size,
+  Underfive_children_in_household,
+  Water_source,
+  Drinking_water_treatment,
+  Toilet_type,
+  Sharing_toilet_with_others,
+  Distance_to_water_source,
+  Having_fridge<-rwanda_2020$v122
+)
+
+write_xlsx(Household_Characteristics, "Household_Characteristics.xlsx")
+
+# Delivery and Healthcare Access
+Delivery_and_Healthcare <- data.frame(
+  Delivery_place,
+  Distance_to_health_facility
+)
+
+write_xlsx(Delivery_and_Healthcare, "Delivery_and_Healthcare.xlsx")
+
+# Health and Insurance
+Health_and_Insurance <- data.frame(
+  Insurance_status,
+  Exposure_to_media_1,
+  Exposure_to_media_2,
+  Exposure_to_media_3,
+  Exposure_to_media_4,
+  Exposure_to_media_5
+)
+
+
+write_xlsx(Health_and_Insurance, "Health_and_Insurance.xlsx")
+
+# Outcome Variables
+Outcome_Variables <- data.frame(
+  Under_five_mortality,
+  Age_at_death,
+  ANC_visits,
+  Size_of_child_at_birth,
+  Birth_weight_in_kg,
+  Delivery_by_CS,
+  Religion,
+  Birth_order
+)
+
+write_xlsx(Outcome_Variables, "Outcome_Variables.xlsx")
+
+# Vaccination
+Vaccination <- data.frame(
+  Received_BCG,
+  Received_DPT1,
+  Received_Polio1,
+  Received_DPT2,
+  Received_Polio2,
+  Received_DPT3,
+  Received_Polio3,
+  Received_Measles,
+  Received_Polio0,
+  Ever_had_vaccination
+)
+
+write_xlsx(Vaccination, "Vaccination.xlsx")
+
+```
+
+```{r}
+
+# Create a workbook
+wb <- createWorkbook()
+
+addWorksheet(wb, "Demographics")
+writeData(wb, "Demographics", Demographics)
+
+addWorksheet(wb, "Contraception")
+writeData(wb, "Contraception", Contraception)
+
+addWorksheet(wb, "Wealth and Residence")
+writeData(wb, "Wealth and Residence", Wealth_and_Residence)
+
+addWorksheet(wb, "Household Characteristics")
+writeData(wb, "Household Characteristics", Household_Characteristics)
+
+addWorksheet(wb, "Delivery and Healthcare Access")
+writeData(wb, "Delivery and Healthcare Access", Delivery_and_Healthcare)
+
+addWorksheet(wb, "Health and Insurance")
+writeData(wb, "Health and Insurance", Health_and_Insurance)
+
+addWorksheet(wb, "Outcome Variables")
+writeData(wb, "Outcome Variables", Outcome_Variables)
+
+addWorksheet(wb, "Vaccination")
+writeData(wb, "Vaccination", Vaccination)
+
+saveWorkbook(wb, "Combined_Data.xlsx", overwrite = TRUE)
+
+```
+
+
+
+
